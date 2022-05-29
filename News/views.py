@@ -5,11 +5,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
+from django.core.cache import cache
 from .models import Author, Category, PostCategory
 from .models import Post as PostModel
 from .filters import NewsFilter
 from .forms import PostForm
 from .tasks import send_new_mail
+
+import logging
 
 
 class PostList(ListView):
@@ -24,10 +27,53 @@ class PostList(ListView):
         context['filter'] = NewsFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
+    def get(self, request, *args, **kwargs):
+        console_1 = logging.getLogger('console_1')
+        console_1.debug("")
+        console_1.info("")
+        console_2 = logging.getLogger('console_2')
+        console_2.warning("")
+        console_3 = logging.getLogger('console_3')
+        console_3.error("")
+        console_3.critical("")
+        file = logging.getLogger('file')
+        file.info("")
+        file.warning("")
+        file.error("")
+        file.critical("")
+        django_request = logging.getLogger('django.request')
+        django_request.error("")
+        django_request.critical("")
+        django_server = logging.getLogger('django.server')
+        django_server.error("")
+        django_server.critical("")
+        django_template = logging.getLogger('django.template')
+        django_template.error("")
+        django_template.critical("")
+        django_db = logging.getLogger('django.db_backends')
+        django_db.error("")
+        django_db.critical("")
+        file_3 = logging.getLogger('file_3')
+        file_3.debug("")
+        file_3.info("")
+        file_3.warning("")
+        file_3.error("")
+        file_3.critical("")
+
+        return super().get(request, *args, **kwargs)
+
 
 class PostDetail(DetailView):
     template_name = 'post_detail.html'
     queryset = PostModel.objects.all()
+
+    def get_object(self, *args, **kwargs):
+        obj=cache.get(f'post-{self.kwargs["pk"]}', None)
+        if not obj:
+            obj = super().get_object(*args, **kwargs) 
+            cache.set(f'product-{self.kwargs["pk"]}', obj)
+        
+        return obj
 
 
 class SearchList(ListView):

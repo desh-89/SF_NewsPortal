@@ -185,3 +185,137 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+CACHES = {
+    'default': {
+        'BACKEND':'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION':os.path.join(BASE_DIR, 'cache_files'),
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, 
+    'formatters': {
+        'console_1': {
+            'format': '{asctime} {levelname} {message}',
+            'style' : '{',
+        },
+        'console_2': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'style' : '{',
+        },
+        'console_3': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'style' : '{',
+        },
+        'file_general': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style' : '{',
+        },
+        'file_errors': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'style' : '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'django_console_1': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_1'
+        },
+        'django_console_2': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_2'
+        },
+        'django_console_3': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_3'
+        },
+        'django_file_1': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'file_general',
+            'filename':'general.log'
+        },
+        'django_file_2': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'file_errors',
+            'filename':'errors.log'
+        },
+        'django_file_3': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'file_general',
+            'filename':'security.log'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+        }
+    },
+    'loggers': {
+        'console_1': {
+            'handlers': ['django_console_1'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'console_2': {
+            'handlers': ['django_console_2'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'console_3': {
+            'handlers': ['django_console_3'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'file': {
+            'handlers': ['django_file_1'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['django_file_2', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['django_file_2', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.template': {
+            'handlers': ['django_file_2'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db_backends': {
+            'handlers': ['django_file_2'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'file_3': {
+            'handlers': ['django_file_3'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
