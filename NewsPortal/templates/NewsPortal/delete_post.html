@@ -1,0 +1,21 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Delete post
+{% endblock title %}
+
+
+{% block content %}
+<h2>Вы действительно хотите удалить новость?</h2>
+        <div class="brd">
+            {{ new.head|censor }}{{new.creation_time|date:'d M Y'}}</p>
+            {{ new.text|censor }}</p>
+            <a href="/news/">Назад к списку новостей</a> </p>
+        </div>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="подтвердить"></form>
+
+{% endblock content %}

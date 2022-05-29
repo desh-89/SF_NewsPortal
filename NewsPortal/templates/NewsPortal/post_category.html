@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Category
+{% endblock title %}
+
+{% block content %}
+{% if user.is_anonymous %}
+    <h4>
+        Неавторизованный пользователь не может оформлять подписки!
+    </h4>
+    {% else %}
+        {% if is_subscribe %}
+            <a href="">Отписаться</a>
+        {% else %}
+            <h4>Оформить подписку на категорию "{{ post_category }}"?</h4>
+            <a href="{% url 'subscribe_category' post_category.id %}">Подписаться</a>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

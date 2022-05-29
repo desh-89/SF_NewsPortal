@@ -1,0 +1,18 @@
+{% extends 'news.html' %}
+{% load custom_filters %}
+
+{% block title %}
+    Search
+    {% endblock title %}
+{% block content %}
+<form method="get">
+    {{ filter.form.as_p }}
+    <input type="submit" />
+    </form>
+    {% for obj in filter.qs %}
+        {{ obj.dateCreation|date:'  d M Y' }}, 
+        {{ obj.author }}, 
+        {{ obj.title }}, 
+        {{ obj.text|truncatechars:20 }}</p>
+    {% endfor %}
+    {% endblock content %}
